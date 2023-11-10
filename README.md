@@ -18,6 +18,13 @@ docker-compose build
 # コンテナの起動
 docker-compose up -d
 ```
+
+## コンテナを複数台起動する場合
+
+```bash
+docker compose up -d --scale rstudio=10
+```
+ 
 # push方法
 
 ```bash
