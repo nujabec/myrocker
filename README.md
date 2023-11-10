@@ -18,13 +18,18 @@ docker-compose build
 # コンテナの起動
 docker-compose up -d
 ```
+# push方法
+
+```bash
+docker push nujabec/myrocker:20231110
+```
 
 ## オフライン環境にdocker imageを持っていく方法
 
 ```bash
 # オンライン端末でイメージを作成
 # docker imageをtarファイルに変換
-docker save -o myrocker_20231110.tar nujabec/myrocker:20231110 
+docker save nujabec/myrocker:20231110 > myrocker_20231110.tar
 # オフライン端末で、tarファイルからdocker imageを読む
-docker load -i myrocker_20231110.tar
+docker load < myrocker_20231110.tar
 ```

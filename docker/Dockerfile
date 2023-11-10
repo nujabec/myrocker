@@ -229,3 +229,7 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     text2vec \
     kernlab \
     && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    prismatic \
+    && rm -rf /tmp/downloaded_packages/
