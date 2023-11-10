@@ -188,24 +188,6 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     && rm -rf /tmp/downloaded_packages/
 
 RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
-    xgboost \
-    tm \
-    SnowballC \
-    text2vec \
-    kernlab \
-    rpivotTable \
-    DataExplorer \
-    skimr \
-    XLConnect \
-    mlr \
-    terra \
-    spData \
-    mapview \
-    osrm \
-    movecost \
-    && rm -rf /tmp/downloaded_packages/
-
-RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     miniCRAN \
     rjson \
     gghighlight \
@@ -222,4 +204,28 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     svglite \
     fpCompare \
     devEMF \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    xgboost \
+    && rm -rf /tmp/downloaded_packages/
+
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    rpivotTable \
+    DataExplorer \
+    skimr \
+    XLConnect \
+    mlr \
+    terra \
+    spData \
+    mapview \
+    osrm \
+    movecost \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    SnowballC \
+    text2vec \
+    kernlab \
     && rm -rf /tmp/downloaded_packages/
