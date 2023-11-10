@@ -179,11 +179,4 @@ RUN R -e "options(repos = c(CRAN = 'https://cran.ism.ac.jp/'))" && \
 
 # 設定ファイルのcopy
 COPY --chown=rstudio:rstudio rstudio-prefs_mysettings.json /home/rstudio/.config/rstudio/rstudio-prefs.json
-
-# Rプロファイルをコピー - RStudio起動時に実行したいRスクリプトをこのファイルに書くことが出来る
-# RStudioのみ再起動した場合も読み込まれます
 COPY --chown=rstudio:rstudio dotRprofile /home/rstudio/.Rprofile
-
-# shiny serverのインストール
-# RUN  /rocker_scripts/install_shiny_server.sh 
-

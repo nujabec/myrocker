@@ -1,10 +1,9 @@
-# nujabec/rocker-pilot
+# nujabec/myrocker
 
 ## 概要
 
 - R 4.3.2
 - RstudioServer(Enabel GitHub Copilot)
-- ShinyServer
 - オフライン環境で使うケースも想定し大量のパッケージをinstall済み
 
 ## 使い方
@@ -25,7 +24,7 @@ docker-compose up -d
 ```bash
 # オンライン端末でイメージを作成
 # docker imageをtarファイルに変換
-docker save -o rocker-pilot-10.tar nujabec/rokcer-pilot:1.0 
+docker save -o myrocker_20231110.tar nujabec/myrocker:20231110 
 # オフライン端末で、tarファイルからdocker imageを読む
-docker load -i rocker-pilot-10.tar
+docker load -i myrocker_20231110.tar
 ```
