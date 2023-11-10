@@ -213,23 +213,26 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     && rm -rf /tmp/downloaded_packages/
 
 RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    rstatix \
+    broom \
+    lmtest \
+    easystats \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     parameters \
     see \
     cowplot \
     patchwork \
     RColorBrewer \
-    ggnewscale \
     ggridges \
-    DiagrammeR \
     ggrepel \
-    plotly \
     && rm -rf /tmp/downloaded_packages/
 
 RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
-    rstatix \
-    broom \
-    lmtest \
-    easystats \
+    ggnewscale \
+    DiagrammeR \
+    plotly \
     && rm -rf /tmp/downloaded_packages/
 
 # Copy RStudio settings
