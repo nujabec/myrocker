@@ -1,0 +1,9 @@
+ => [ 7/21] RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1     rstatix     broom     lmtest     easystats     parameters     see     cowplot     patchwork     RColorBrewer     ggnewscale     ggridges     Di  2977.6s 
+ => => # /usr/local/lib/R/site-library/RcppEigen/include/Eigen/src/Core/../plug
+ => => # nCwiseUnaryOps.h:48:179:   [ skipping 4 instantiation contexts, use -f
+ => => # backtrace-limit=0 to disable ]
+ => => # stan_files/bernoulli.hpp:4430:66:   required from ‘stan::scalar_type_t
+ => => # l_bernoulli_namespace::model_bernoulli::log_prob_impl(VecR&, VecI&, st
+ => => # m*) const [with bool propto__ = false; bool jacobian__ = false; VecR
+failed to receive status: rpc error: code = Canceled desc = context canceled
+
