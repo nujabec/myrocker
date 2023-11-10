@@ -58,24 +58,6 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     && rm -rf /tmp/downloaded_packages/
 
 RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
-    rstatix \
-    broom \
-    lmtest \
-    easystats \
-    parameters \
-    see \
-    cowplot \
-    patchwork \
-    RColorBrewer \
-    ggnewscale \
-    ggridges \
-    DiagrammeR \
-    ggrepel \
-    plotly \
-    && rm -rf /tmp/downloaded_packages/
-
-
-RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     gganimate \
     sf \
     tmap \
@@ -230,6 +212,25 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     prismatic \
     && rm -rf /tmp/downloaded_packages/
 
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    parameters \
+    see \
+    cowplot \
+    patchwork \
+    RColorBrewer \
+    ggnewscale \
+    ggridges \
+    DiagrammeR \
+    ggrepel \
+    plotly \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    rstatix \
+    broom \
+    lmtest \
+    easystats \
+    && rm -rf /tmp/downloaded_packages/
 
 # Copy RStudio settings
 COPY --chown=rstudio:rstudio rstudio-prefs_mysettings.json /home/rstudio/.config/rstudio/rstudio-prefs.json
