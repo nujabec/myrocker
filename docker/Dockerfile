@@ -5,7 +5,12 @@ FROM rocker/geospatial:4.3.2
 ENV LANG ja_JP.UTF-8
 ENV LC_ALL ja_JP.UTF-8
 
-# 日本語化
+# Copy RStudio settings
+COPY --chown=rstudio:rstudio rstudio-prefs_mysettings.json /home/rstudio/.config/rstudio/rstudio-prefs.json
+COPY --chown=rstudio:rstudio dotRprofile /home/rstudio/.Rprofile
+
+# Setting Japanese locale
+# Enable copilot
 RUN sed -i '$d' /etc/locale.gen && \  
     echo "ja_JP.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen ja_JP.UTF-8 && \
@@ -14,169 +19,207 @@ RUN sed -i '$d' /etc/locale.gen && \
     ln -sf  /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     apt-get update && apt-get install -y fonts-ipaexfont fonts-noto-cjk && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-#  Rパッケージをimport
-RUN R -e "options(repos = c(CRAN = 'https://cran.ism.ac.jp/'))" && \
-    install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
-    here && \
-    # tidylog \
-    # DBI \
-    # RPostgreSQL \
-    # odbc \
-    # pacman \
-    # rio \
-    # openxlsx \
-    # renv \
-    # remotes \
-    # linelist \
-    # naniar \
-    # janitor \
-    # gtsummary \
-    # rstatix \
-    # broom \
-    # lmtest \
-    # easystats \
-    # parameters \
-    # see \
-    # cowplot \
-    # patchwork \
-    # RColorBrewer \
-    # ggnewscale \
-    # ggridges \
-    # DiagrammeR \
-    # ggrepel \
-    # plotly \
-    # gganimate \
-    # sf \
-    # tmap \
-    # OpenStreetMap \
-    # spdep \
-    # rmarkdown \
-    # reportfactory \
-    # flexdashboard \
-    # shiny \
-    # knitr \
-    # DT \
-    # gt \
-    # huxtable \
-    # gsDesign \
-    # shinydashboard \
-    # formattable \
-    # ggplotgui \
-    # ggraptR \
-    # MASS \
-    # rJava \
-    # pool \
-    # Rmisc \
-    # celestial \
-    # NipponMap \
-    # GGally \
-    # ggmap \
-    # ggmosaic \
-    # Hmisc \
-    # kableExtra \
-    # mice \
-    # summarytools \
-    # zipangu \
-    # coin \
-    # sessioninfo \
-    # styler \
-    # sqldf \
-    # Matching \
-    # MatchIt \
-    # WeightIt \
-    # epiR \
-    # cobalt \
-    # glmnet \
-    # glmnetUtils \
-    # rpart \
-    # partykit \
-    # pROC \
-    # caret \
-    # Amelia \
-    # tibbletime \
-    # xts \
-    # forecast \
-    # rstan \
-    # styler \
-    # survival \
-    # survminer \
-    # broom \
-    # lme4 \
-    # lmerTest \
-    # gee \
-    # geepack \
-    # emmeans \
-    # interactions \
-    # forestplot \
-    # boot \
-    # logistf \
-    # ggsci \
-    # ggfortify \
-    # ggbeeswarm \
-    # ggpubr \
-    # lubridate \
-    # haven \
-    # esquisse \
-    # tableone \
-    # RMySQL \
-    # jsonlite \
-    # checkpoint \
-    # emmeans \
-    # curl \
-    # doParallel \
-    # reshape2 \
-    # qlcMatrix \
-    # proxy \
-    # moments \
-    # greybox \
-    # muhaz \
-    # rpart.plot \
-    # ranger \
-    # xgboost \
-    # tm \
-    # SnowballC \
-    # text2vec \
-    # kernlab \
-    # rpivotTable \
-    # DataExplorer \
-    # skimr \
-    # XLConnect \
-    # mlr \
-    # terra \
-    # spData \
-    # mapview \
-    # osrm \
-    # movecost \
-    # miniCRAN \
-    # rjson \
-    # gghighlight \
-    # ggThemeAssist \
-    # targets \
-    # revealjs \
-    # docxtractr \
-    # cronR \
-    # export \
-    # ragg \
-    # svglite \
-    # fpCompare \
-    # devEMF && \
-    # # GitHubからRパッケージをinstall
-    # installGithub.r \
-    # davidgohel/gdtools \
-    # davidgohel/officer \
-    # davidgohel/flextable \
-    # uribo/jpmesh \
-    # uribo/jpndistrict \
-    # mlr-org/shinyMlr && \
-    # インストール時にダウンロードした一時ファイルの削除
-    rm -rf /tmp/downloaded_packages/ /tmp/*.rds && \
+    rm -rf /var/lib/apt/lists/* && \
+    R -e "options(repos = c(CRAN = 'https://cran.ism.ac.jp/'))" && \
     echo "copilot-enabled=1" >> /etc/rstudio/rsession.conf && \
     cd /home/rstudio && mkdir .cache .cache/R .cache/R/renv .TinyTeX && \
     chown -R rstudio:rstudio /home/rstudio && \
     chmod -R 777 /home/rstudio
 
-# 設定ファイルのcopy
-COPY --chown=rstudio:rstudio rstudio-prefs_mysettings.json /home/rstudio/.config/rstudio/rstudio-prefs.json
-COPY --chown=rstudio:rstudio dotRprofile /home/rstudio/.Rprofile
+# Inastall R packages from GitHub
+RUN installGithub.r \
+    davidgohel/gdtools \
+    davidgohel/officer \
+    davidgohel/flextable \
+    uribo/jpmesh \
+    uribo/jpndistrict \
+    mlr-org/shinyMlr && \
+    rm -rf /tmp/downloaded_packages/ 
+
+# Install R packages
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    renv \
+    here \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    tidylog \
+    DBI \
+    RPostgreSQL \
+    odbc \
+    pacman \
+    rio \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    openxlsx \
+    renv \
+    remotes \
+    linelist \
+    naniar \
+    janitor \
+    gtsummary \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    rstatix \
+    broom \
+    lmtest \
+    easystats \
+    parameters \
+    see \
+    cowplot \
+    patchwork \
+    RColorBrewer \
+    ggnewscale \
+    ggridges \
+    DiagrammeR \
+    ggrepel \
+    plotly \
+    && rm -rf /tmp/downloaded_packages/
+
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    gganimate \
+    sf \
+    tmap \
+    OpenStreetMap \
+    spdep \
+    rmarkdown \
+    reportfactory \
+    flexdashboard \
+    shiny \
+    knitr \
+    DT \
+    gt \
+    huxtable \
+    gsDesign \
+    shinydashboard \
+    formattable \
+    ggplotgui \
+    ggraptR \
+    && rm -rf /tmp/downloaded_packages/
+
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    mice \
+    pool \
+    Rmisc \
+    celestial \
+    NipponMap \
+    GGally \
+    ggmap \
+    ggmosaic \
+    Hmisc \
+    kableExtra \
+    MASS \
+    && rm -rf /tmp/downloaded_packages/
+
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    rJava \
+    summarytools \
+    zipangu \
+    coin \
+    sessioninfo \
+    styler \
+    sqldf \
+    Matching \
+    MatchIt \
+    WeightIt \
+    epiR \
+    cobalt \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    glmnet \
+    glmnetUtils \
+    rpart \
+    partykit \
+    pROC \
+    caret \
+    Amelia \
+    tibbletime \
+    xts \
+    forecast \
+    rstan \
+    styler \
+    survival \
+    survminer \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    broom \
+    lme4 \
+    lmerTest \
+    gee \
+    geepack \
+    emmeans \
+    interactions \
+    forestplot \
+    boot \
+    logistf \
+    ggsci \
+    ggfortify \
+    ggbeeswarm \
+    ggpubr \
+    lubridate \
+    && rm -rf /tmp/downloaded_packages/
+
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    haven \
+    esquisse \
+    tableone \
+    RMySQL \
+    jsonlite \
+    checkpoint \
+    emmeans \
+    curl \
+    doParallel \
+    reshape2 \
+    qlcMatrix \
+    proxy \
+    moments \
+    greybox \
+    muhaz \
+    rpart.plot \
+    ranger \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    xgboost \
+    tm \
+    SnowballC \
+    text2vec \
+    kernlab \
+    rpivotTable \
+    DataExplorer \
+    skimr \
+    XLConnect \
+    mlr \
+    terra \
+    spData \
+    mapview \
+    osrm \
+    movecost \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    miniCRAN \
+    rjson \
+    gghighlight \
+    ggThemeAssist \
+    targets \
+    revealjs \
+    docxtractr \
+    cronR \
+    export \
+    && rm -rf /tmp/downloaded_packages/
+
+RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+    ragg \
+    svglite \
+    fpCompare \
+    devEMF \
+    && rm -rf /tmp/downloaded_packages/
