@@ -5,10 +5,6 @@ FROM rocker/geospatial:4.3.2
 ENV LANG ja_JP.UTF-8
 ENV LC_ALL ja_JP.UTF-8
 
-# Copy RStudio settings
-COPY --chown=rstudio:rstudio rstudio-prefs_mysettings.json /home/rstudio/.config/rstudio/rstudio-prefs.json
-COPY --chown=rstudio:rstudio dotRprofile /home/rstudio/.Rprofile
-
 # Setting Japanese locale
 # Enable copilot
 RUN sed -i '$d' /etc/locale.gen && \  
@@ -233,3 +229,8 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
 RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     prismatic \
     && rm -rf /tmp/downloaded_packages/
+
+
+# Copy RStudio settings
+COPY --chown=rstudio:rstudio rstudio-prefs_mysettings.json /home/rstudio/.config/rstudio/rstudio-prefs.json
+COPY --chown=rstudio:rstudio dotRprofile /home/rstudio/.Rprofile
