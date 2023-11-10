@@ -1,1 +1,2 @@
 getwd()
+source('/home/rstudio/srv/function/index.R')
