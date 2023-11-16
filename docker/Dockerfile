@@ -251,6 +251,8 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/truste
     # 上のcodeの解説: https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list からデータを取得し、それを /etc/apt/sources.list.d/mssql-release.list に書き込む
     && apt-get update \
     && ACCEPT_EULA=Y apt-get install -y msodbcsql17 \
+    && ACCEPT_EULA=Y apt-get install -y mssql-tools \
+    && apt-get install -y unixodbc-dev \
     # 上のcodeの解説: ACCEPT_EULA=Y は、msodbcsql17のライセンスに同意するという意味
     && apt-get clean  \
     && rm -rf /var/lib/apt/lists/*
