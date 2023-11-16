@@ -235,6 +235,25 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     plotly \
     && rm -rf /tmp/downloaded_packages/
 
+
+
+
 # Copy RStudio settings
 COPY --chown=rstudio:rstudio rstudio-prefs_mysettings.json /home/rstudio/.config/rstudio/rstudio-prefs.json
 COPY --chown=rstudio:rstudio dotRprofile /home/rstudio/.Rprofile
+
+
+# sqlserverようにMcicrosoft ODBC17のdriverを入れる
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
+    # 上のcodeの解説: https://packages.microsoft.com/keys/microsoft.asc からデータを取得し、それを /etc/apt/trusted.gpg.d/microsoft.asc に書き込む
+    # teeは、標準入力からデータを受け取り、それを標準出力とファイルに書き込むコマンド
+    && curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
+    # 上のcodeの解説: https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list からデータを取得し、それを /etc/apt/sources.list.d/mssql-release.list に書き込む
+    && apt-get update \
+    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 \
+    # 上のcodeの解説: ACCEPT_EULA=Y は、msodbcsql17のライセンスに同意するという意味
+    && apt-get clean  \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PATH="${PATH}:/opt/mssql-tools/bin"
+
