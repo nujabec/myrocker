@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     image: nujabec/myrocker:20240124
     ports:
-      - "50001-50002:8787"
+      - "50001-50001:8787"
     volumes:
       - ../srv/:/home/rstudio/srv/
       - renv:/home/rstudio/.cache/R/renv
