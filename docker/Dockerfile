@@ -144,27 +144,6 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     lubridate \
     && rm -rf /tmp/downloaded_packages/
 
-
-RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
-    haven \
-    esquisse \
-    tableone \
-    RMySQL \
-    jsonlite \
-    checkpoint \
-    emmeans \
-    curl \
-    doParallel \
-    reshape2 \
-    qlcMatrix \
-    proxy \
-    moments \
-    greybox \
-    muhaz \
-    rpart.plot \
-    ranger \
-    && rm -rf /tmp/downloaded_packages/
-
 RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     miniCRAN \
     rjson \
@@ -187,7 +166,6 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
 RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     xgboost \
     && rm -rf /tmp/downloaded_packages/
-
 
 RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     rpivotTable \
@@ -233,15 +211,33 @@ RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
     ggnewscale \
     DiagrammeR \
     plotly \
+    haven \
+    esquisse \
+    tableone \
+    RMySQL \
+    jsonlite \
+    checkpoint \
+    emmeans \
+    curl \
+    doParallel \
+    reshape2 \
+    moments \
+    greybox \
+    muhaz \
+    rpart.plot \
+    ranger \
+    proxy \
     && rm -rf /tmp/downloaded_packages/
 
-
-
+# 20240124 install errorが発生。不要なパッケージなので、削除
+# package ‘qlcMatrix’ is not available for this version of R
+# RUN install2.r --error --skipinstalled --deps TRUE --ncpu -1 \
+#     qlcMatrix \
+#     && rm -rf /tmp/downloaded_packages/
 
 # Copy RStudio settings
 COPY --chown=rstudio:rstudio rstudio-prefs_mysettings.json /home/rstudio/.config/rstudio/rstudio-prefs.json
 COPY --chown=rstudio:rstudio dotRprofile /home/rstudio/.Rprofile
-
 
 # sqlserverようにMcicrosoft ODBC17のdriverを入れる
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | tee /etc/apt/trusted.gpg.d/microsoft.asc \
